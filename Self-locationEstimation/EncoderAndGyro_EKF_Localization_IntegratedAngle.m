@@ -14,7 +14,7 @@ Step = ceil((ContinueTime - time) / dt);
 
 % Machine parameter Init
 global Tred ;
-Tred = 126e-3;  %[m]
+Tred = 100e-3;  %[m]
 
 % Input parameter Init
 Robot_u = [1, 0.1]; %[Transration, Rotation]

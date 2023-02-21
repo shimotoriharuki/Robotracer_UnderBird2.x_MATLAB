@@ -28,7 +28,7 @@ PreEstPosition = [0, 0, 0];
 DR_OnlyPosition = [0, 0, 0]; % Robot's Dead-Reckoning position
 PreDR_OnlyPosition = [0, 0, 0];
 
-MeaPosition = [0, 0, 0];
+MeasuredPosition = [0, 0, 0];
 
 EstPt = 0; % Estimation Pt
 PrePt = 0;
@@ -46,9 +46,9 @@ for i = 1 : Step
     u = CalcU(InputVelo); % Calclate dS & dTh
     DR_OnlyPosition = GetDR_Position(PreDR_OnlyPosition, u); % Only Dead-Reckoning position
     
-    MeaPosition = GetMeaPosition(PreEstPosition, u); % Measured position
+    MeasuredPosition = GetMeasuredPosition(PreEstPosition, u); % Measured position
     
-    [EstPosition, EstPt, ObsZt] = GetSelfLocation(PreEstPosition, PrePt, PreZt, InputVelo, MeaPosition); % Estimated position by EKF
+    [EstPosition, EstPt, ObsZt] = GetSelfLocation(PreEstPosition, PrePt, PreZt, InputVelo, MeasuredPosition); % Estimated position by EKF
     
     PreTruePosition = TruePosition;
     PreEstPosition = EstPosition;
