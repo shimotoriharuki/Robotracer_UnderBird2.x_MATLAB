@@ -1,21 +1,21 @@
-function [EstPosition, EstPt, ObsZt] = GetSelfLocation(PrePosition, PrePt, PreZt, velo, HatPosition)
+function [EstPosition, EstPt, ObsZt] = GetSelfLocation(PrePosition, PrePt, PreZt, velo, HatPosition, ErrerParameter, Qt, Tred, dt)
     % --------------------Init------------------%
-    global ErrerParameter;
-    global Qt;
+%     global ErrerParameter;
+%     global Qt;
       
-    At = [0, 0, 0;
-          0, 0, 0;
-          0, 0, 0];
-      
-    Wt = [0, 0;
-          0, 0;
-          0, 0];
+%     At = [0, 0, 0;
+%           0, 0, 0;
+%           0, 0, 0];
+%       
+%     Wt = [0, 0;
+%           0, 0;
+%           0, 0];
     
     Ht = [0, 0, 1];
     
     %---------------------- Calclation start----------------------------%
     % Calclate dS & dTh
-    u = CalcU(velo); 
+    u = CalcU(velo, Tred, dt); 
     
     % The process noise covariance matrix
     Rt = CalcRt(ErrerParameter, u); 
@@ -30,7 +30,7 @@ function [EstPosition, EstPt, ObsZt] = GetSelfLocation(PrePosition, PrePt, PreZt
     
     %------------ Update step^^^^^^^^^^%
     % Get Robot's angle for gyro or geomagnetism
-    ObsZt = GetAngleForIMU(PreZt, velo(2)); 
+    ObsZt = GetAngleForIMU(PreZt, velo(2), Qt, dt); 
     
     % Covariance of observation residuals
     St = Ht * HatPt * Ht' + Qt; 

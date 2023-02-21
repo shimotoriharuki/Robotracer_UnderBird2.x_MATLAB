@@ -1,6 +1,6 @@
-function position = GetMeasuredPosition(PrePosition, u)
+function position = GetMeasuredPosition(PrePosition, u, ErrerParameter)
     % This is rewritten to the robot odometry program
-    global ErrerParameter;
+%     global ErrerParameter;
     
     Rt = CalcRt(ErrerParameter, u); % the process noise covariance matrix
     

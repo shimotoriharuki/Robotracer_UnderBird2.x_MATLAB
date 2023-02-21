@@ -1,5 +1,5 @@
-function  out = CalcPositionWithError(position, u)
-    global sigma;
+function  out = CalcPositionWithError(position, u, sigma)
+%     global sigma;
     
     u(1) = u(1) + randn() * sqrt(sigma(1));
     u(2) = u(2) + randn() * sqrt(sigma(2));

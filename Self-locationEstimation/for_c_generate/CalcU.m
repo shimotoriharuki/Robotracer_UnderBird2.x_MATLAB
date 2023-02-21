@@ -1,7 +1,7 @@
-function out = CalcU(u) 
+function out = CalcU(u, Tred, dt) 
 
-    global Tred
-    global dt
+%     global Tred
+%     global dt
     
     velo.Tra = u(1);
     velo.Rot = u(2);
