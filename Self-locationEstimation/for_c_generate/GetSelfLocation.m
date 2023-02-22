@@ -1,4 +1,4 @@
-function [EstPosition, EstPt, ObsZt] = GetSelfLocation(PrePosition, PrePt, PreZt, velo, HatPosition, ErrerParameter, Qt, Tred, dt)
+function [EstPosition, EstPt] = GetSelfLocation(MeasuredPosition, ObsZt, TargetVelo, PrePosition, PrePt, ErrerParameter, Qt, Tred, dt)
     % --------------------Init------------------%
 %     global ErrerParameter;
 %     global Qt;
@@ -15,7 +15,7 @@ function [EstPosition, EstPt, ObsZt] = GetSelfLocation(PrePosition, PrePt, PreZt
     
     %---------------------- Calclation start----------------------------%
     % Calclate dS & dTh
-    u = CalcU(velo, Tred, dt); 
+    u = CalcU(TargetVelo, Tred, dt); 
     
     % The process noise covariance matrix
     Rt = CalcRt(ErrerParameter, u); 
@@ -27,10 +27,11 @@ function [EstPosition, EstPt, ObsZt] = GetSelfLocation(PrePosition, PrePt, PreZt
 
     % Calclation estmation errors covariance matrix
     HatPt = At * PrePt * At' + Wt * Rt * Wt'; 
+
     
-    %------------ Update step^^^^^^^^^^%
+    %------------ Update step------------%
     % Get Robot's angle for gyro or geomagnetism
-    ObsZt = GetAngleForIMU(PreZt, velo(2), Qt, dt); 
+%     ObsZt = GetAngleForIMU(PreZt, TargetVelo(2), Qt, dt); 
     
     % Covariance of observation residuals
     St = Ht * HatPt * Ht' + Qt; 
@@ -39,10 +40,10 @@ function [EstPosition, EstPt, ObsZt] = GetSelfLocation(PrePosition, PrePt, PreZt
     Kt = St \ (HatPt * Ht');
     
     % Transpose matrix
-    HatPosition = HatPosition';
+    MeasuredPosition = MeasuredPosition';
     
     % Calclation estimation position
-    EstPosition = HatPosition + Kt * (ObsZt - Ht * HatPosition); 
+    EstPosition = MeasuredPosition + Kt * (ObsZt - Ht * MeasuredPosition); 
     
     % Updata estmation errors covariance matrix
     EstPt = (eye(size(EstPosition, 1)) - Kt * Ht) * HatPt; 

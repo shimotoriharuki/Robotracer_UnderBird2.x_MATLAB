@@ -13,7 +13,7 @@ Step = ceil((ContinueTime - StartTime) / dt);
 InputVelo = [1, 0.]; % [Transration (m/s), Rotation (rad/s)]
     
 % Dispersion Init
-ErrerParameter = [1, 0.1, 0.1, 0.1]; % Mobile robot related error parameters
+ErrerParameter = [0.1, 0.1, 0.1, 0.1]; % Mobile robot related error parameters
 Qt = 0.0001 ^2; % The measurement noise covariance matrix
 
 % Position Init
@@ -44,9 +44,10 @@ for i = 1 : Step
     u = CalcU(InputVelo, Tred, dt); % Calclate dS & dTh
     DR_OnlyPosition = GetDR_Position(PreDR_OnlyPosition, u, ErrerParameter); % Only Dead-Reckoning position
     
+    ObsZt = GetAngleForIMU(PreZt, u(2), Qt, dt);
     MeasuredPosition = GetMeasuredPosition(PreEstPosition, u, ErrerParameter); % Measured position
     
-    [EstPosition, EstPt, ObsZt] = GetSelfLocation(PreEstPosition, PrePt, PreZt, InputVelo, MeasuredPosition, ErrerParameter, ...
+    [EstPosition, EstPt] = GetSelfLocation(MeasuredPosition, ObsZt, InputVelo, PreEstPosition, PrePt, ErrerParameter, ...
         Qt, Tred, dt); % Estimated position by EKF
     
     PreTruePosition = TruePosition;
