@@ -3,18 +3,18 @@ clear all
 
 % Init
 StartTime = 0;
-ContinueTime = 60;  %[s]
+ContinueTime = 100;  %[s]
  
 dt = 0.01;   %[s]
 Step = ceil((ContinueTime - StartTime) / dt);
 
 % Input parameter Init
 
-InputVelo = [1, 0.]; % [Transration (m/s), Rotation (rad/s)]
+InputVelo = [1, 0.1]; % [Transration (m/s), Rotation (rad/s)]
     
 % Dispersion Init
 ErrerParameter = [0.1, 0.1, 0.1, 0.1]; % Mobile robot related error parameters
-Qt = 0.0001 ^2; % The measurement noise covariance matrix
+Qt = 0.001 ^2; % The measurement noise covariance matrix
 
 % Position Init
 TruePosition = [0, 0, 0]; % Robot's true position
@@ -31,8 +31,8 @@ MeasuredPosition = [0, 0, 0];
 EstPt = 0; % Estimation Pt
 PrePt = 0;
 
-ObsZt = 0; % Observed Zt
-PreZt = 0;
+Angle = 0; % Observed Zt
+PreAngle = 0;
 
 % global Tred ;
 Tred = 100e-3;  %[m]
@@ -44,17 +44,17 @@ for i = 1 : Step
     u = CalcU(InputVelo, Tred, dt); % Calclate dS & dTh
     DR_OnlyPosition = GetDR_Position(PreDR_OnlyPosition, u, ErrerParameter); % Only Dead-Reckoning position
     
-    ObsZt = GetAngleForIMU(PreZt, u(2), Qt, dt);
+    Angle = GetAngleForIMU(PreAngle, InputVelo(2), Qt, dt);
     MeasuredPosition = GetMeasuredPosition(PreEstPosition, u, ErrerParameter); % Measured position
     
-    [EstPosition, EstPt] = GetSelfLocation(MeasuredPosition, ObsZt, InputVelo, PreEstPosition, PrePt, ErrerParameter, ...
+    [EstPosition, EstPt] = GetSelfLocation(MeasuredPosition, Angle, InputVelo, PreEstPosition, PrePt, ErrerParameter, ...
         Qt, Tred, dt); % Estimated position by EKF
     
     PreTruePosition = TruePosition;
     PreEstPosition = EstPosition;
     PreDR_OnlyPosition = DR_OnlyPosition;
     PrePt = EstPt;
-    PreZt = ObsZt;
+    PreAngle = Angle;
     
     % Animation
     if rem(i, 100)==0

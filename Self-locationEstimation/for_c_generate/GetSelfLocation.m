@@ -1,16 +1,5 @@
 function [EstPosition, EstPt] = GetSelfLocation(MeasuredPosition, ObsZt, TargetVelo, PrePosition, PrePt, ErrerParameter, Qt, Tred, dt)
-    % --------------------Init------------------%
-%     global ErrerParameter;
-%     global Qt;
-      
-%     At = [0, 0, 0;
-%           0, 0, 0;
-%           0, 0, 0];
-%       
-%     Wt = [0, 0;
-%           0, 0;
-%           0, 0];
-    
+    % --------------------Init------------------%  
     Ht = [0, 0, 1];
     
     %---------------------- Calclation start----------------------------%
@@ -28,7 +17,6 @@ function [EstPosition, EstPt] = GetSelfLocation(MeasuredPosition, ObsZt, TargetV
     % Calclation estmation errors covariance matrix
     HatPt = At * PrePt * At' + Wt * Rt * Wt'; 
 
-    
     %------------ Update step------------%
     % Get Robot's angle for gyro or geomagnetism
 %     ObsZt = GetAngleForIMU(PreZt, TargetVelo(2), Qt, dt); 
