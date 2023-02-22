@@ -52,7 +52,8 @@ for i = 1 : Step
     MeasuredPosition = GetMeasuredPosition(PreEstPosition, u, ErrerParameter); % Measured position
     PositionFromIMU = GetPositionFromIMU(PrePositionFromIMU, InputVelo, Angle, dt);
     
-    [EstPosition, EstPt] = GetSelfLocation(MeasuredPosition, Angle, InputVelo, PreEstPosition, PrePt, ErrerParameter, ...
+    [EstPosition, EstPt] = GetSelfLocation(MeasuredPosition, Angle ...
+        , InputVelo, PreEstPosition, PrePt, ErrerParameter, ...
         Qt, Tred, dt); % Estimated position by EKF
     
     PreTruePosition = TruePosition;
